@@ -30,6 +30,7 @@ GAC_API_KEY=sk-ant-oat01-xxxxxxx bash <(wget -qO- https://raw.githubusercontent.
 ## 📋 安装内容
 
 - ✅ 自动安装原版Claude Code
+- ✅ 智能检测网络，国内用户自动使用镜像加速
 - ✅ 配置GAC服务器地址 (`https://gaccode.com/claudecode`)
 - ✅ 设置API密钥环境变量
 - ✅ 自动批准API密钥（无需手动确认）

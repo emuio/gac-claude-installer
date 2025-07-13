@@ -41,14 +41,28 @@ if [[ ! $api_key =~ ^sk-ant- ]]; then
 fi
 
 echo "📦 安装原版Claude Code..."
-# 安装Claude Code - 使用正确的包名
+# 安装Claude Code - 使用正确的包名，支持国内镜像加速
 if command -v npm &> /dev/null; then
     echo "🔧 使用npm安装Claude Code..."
-    npm install -g @anthropic-ai/claude-code
+    
+    # 检测是否在中国，使用国内镜像加速
+    if curl -s --connect-timeout 3 https://registry.npmjs.org/ > /dev/null 2>&1; then
+        echo "🌍 使用官方npm镜像..."
+        npm install -g @anthropic-ai/claude-code
+    else
+        echo "🇨🇳 检测到网络较慢，使用国内镜像加速..."
+        npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
+    fi
+    
     if [ $? -ne 0 ]; then
-        echo "❌ npm安装失败，请检查网络连接或npm权限"
-        echo "💡 可能需要使用sudo: sudo npm install -g @anthropic-ai/claude-code"
-        exit 1
+        echo "❌ npm安装失败，尝试使用国内镜像..."
+        npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
+        if [ $? -ne 0 ]; then
+            echo "❌ 安装失败，请检查网络连接或npm权限"
+            echo "💡 可能需要使用sudo权限："
+            echo "   sudo npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com"
+            exit 1
+        fi
     fi
 else
     echo "❌ 需要npm来安装Claude Code"
