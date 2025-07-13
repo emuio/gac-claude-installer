@@ -41,14 +41,20 @@ if [[ ! $api_key =~ ^sk-ant- ]]; then
 fi
 
 echo "📦 安装原版Claude Code..."
-# 安装Claude Code (假设使用npm/curl安装，您可能需要根据实际情况调整)
+# 安装Claude Code - 使用正确的包名
 if command -v npm &> /dev/null; then
-    npm install -g @anthropic/claude-code
-elif command -v curl &> /dev/null; then
-    # 如果有其他安装方式，在这里添加
-    echo "请手动安装Claude Code或确保已安装"
+    echo "🔧 使用npm安装Claude Code..."
+    npm install -g @anthropic-ai/claude-code
+    if [ $? -ne 0 ]; then
+        echo "❌ npm安装失败，请检查网络连接或npm权限"
+        echo "💡 可能需要使用sudo: sudo npm install -g @anthropic-ai/claude-code"
+        exit 1
+    fi
 else
-    echo "❌ 无法自动安装Claude Code，请手动安装后重新运行此脚本"
+    echo "❌ 需要npm来安装Claude Code"
+    echo "请先安装Node.js和npm："
+    echo "  访问: https://nodejs.org/"
+    echo "  或使用包管理器安装"
     exit 1
 fi
 
