@@ -21,12 +21,20 @@ fi
 if [[ -n "$GAC_API_KEY" ]]; then
     api_key="$GAC_API_KEY"
     echo "✅ 使用环境变量中的API密钥"
+    echo "🔍 检测到的密钥前缀: ${api_key:0:15}..."
 else
     read -p "请输入您的GAC API密钥 (sk-ant-oat01-...): " api_key
 fi
 
-if [[ -z "$api_key" ]] || [[ ! $api_key =~ ^sk-ant-oat01- ]]; then
-    echo "❌ API密钥格式不正确，应该以 'sk-ant-oat01-' 开头"
+if [[ -z "$api_key" ]]; then
+    echo "❌ API密钥不能为空"
+    exit 1
+fi
+
+# 检查API密钥格式 - 支持更灵活的格式
+if [[ ! $api_key =~ ^sk-ant- ]]; then
+    echo "❌ API密钥格式不正确，应该以 'sk-ant-' 开头"
+    echo "🔍 当前密钥前缀: ${api_key:0:15}..."
     echo "💡 提示：您可以通过环境变量传入密钥："
     echo "   GAC_API_KEY=sk-ant-oat01-xxxxx curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh | bash"
     exit 1
