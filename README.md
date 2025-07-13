@@ -4,12 +4,17 @@
 
 ## 🚀 一键安装
 
-### 方法1：使用curl + 环境变量 (推荐)
+### 方法1：使用bash + 环境变量 (推荐)
 ```bash
-GAC_API_KEY=sk-ant-oat01-xxxxxxx curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh | bash
+GAC_API_KEY=sk-ant-oat01-xxxxxxx bash <(curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh)
 ```
 
-### 方法2：下载后交互式运行
+### 方法2：使用命令行参数
+```bash
+curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh | bash -s sk-ant-oat01-xxxxxxx
+```
+
+### 方法3：下载后交互式运行
 ```bash
 # 下载脚本
 curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh -o install_gac_claude.sh
@@ -21,7 +26,7 @@ chmod +x install_gac_claude.sh
 ./install_gac_claude.sh
 ```
 
-### 方法3：wget方式
+### 方法4：wget方式
 ```bash
 # 使用环境变量
 GAC_API_KEY=sk-ant-oat01-xxxxxxx bash <(wget -qO- https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh)

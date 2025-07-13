@@ -17,13 +17,31 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# 获取API密钥
+# 获取API密钥 - 支持多种传入方式
+api_key=""
+
+# 方法1: 从环境变量获取
 if [[ -n "$GAC_API_KEY" ]]; then
     api_key="$GAC_API_KEY"
     echo "✅ 使用环境变量中的API密钥"
     echo "🔍 检测到的密钥前缀: ${api_key:0:15}..."
+# 方法2: 从命令行参数获取
+elif [[ -n "$1" ]]; then
+    api_key="$1"
+    echo "✅ 使用命令行参数中的API密钥"
+    echo "🔍 检测到的密钥前缀: ${api_key:0:15}..."
 else
-    read -p "请输入您的GAC API密钥 (sk-ant-oat01-...): " api_key
+    echo "❌ 未检测到API密钥"
+    echo "💡 请使用以下方式之一提供API密钥："
+    echo "   方法1: GAC_API_KEY=your-key bash <(curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh)"
+    echo "   方法2: curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh | bash -s your-key"
+    echo "   方法3: 下载脚本后交互式运行"
+    echo ""
+    if [[ -t 0 ]]; then
+        read -p "或者现在输入您的GAC API密钥 (sk-ant-...): " api_key
+    else
+        exit 1
+    fi
 fi
 
 if [[ -z "$api_key" ]]; then
