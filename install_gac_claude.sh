@@ -17,11 +17,18 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# 提示用户输入API密钥
-read -p "请输入您的GAC API密钥 (sk-ant-oat01-...): " api_key
+# 获取API密钥
+if [[ -n "$GAC_API_KEY" ]]; then
+    api_key="$GAC_API_KEY"
+    echo "✅ 使用环境变量中的API密钥"
+else
+    read -p "请输入您的GAC API密钥 (sk-ant-oat01-...): " api_key
+fi
 
-if [[ ! $api_key =~ ^sk-ant-oat01- ]]; then
+if [[ -z "$api_key" ]] || [[ ! $api_key =~ ^sk-ant-oat01- ]]; then
     echo "❌ API密钥格式不正确，应该以 'sk-ant-oat01-' 开头"
+    echo "💡 提示：您可以通过环境变量传入密钥："
+    echo "   GAC_API_KEY=sk-ant-oat01-xxxxx curl -fsSL https://raw.githubusercontent.com/emuio/gac-claude-installer/main/install_gac_claude.sh | bash"
     exit 1
 fi
 
