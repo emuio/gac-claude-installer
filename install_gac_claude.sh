@@ -124,10 +124,30 @@ echo "  - 基础URL: https://gaccode.com/claudecode"
 echo "  - API密钥已配置并自动批准"
 echo "  - 环境变量已添加到: $shell_config"
 echo ""
-echo "🔄 请运行以下命令使配置生效："
-echo "  source $shell_config"
-echo ""
-echo "或者重新打开终端窗口"
+echo "🔄 自动加载配置..."
+
+# 自动执行source命令使配置立即生效
+if [[ -f "$shell_config" ]]; then
+    source "$shell_config"
+    echo "✅ 配置已自动加载生效"
+else
+    echo "⚠️  配置文件不存在，请手动运行: source $shell_config"
+fi
+
+# 在当前shell中也设置环境变量（以防source失败）
+export ANTHROPIC_BASE_URL=https://gaccode.com/claudecode
+export ANTHROPIC_API_KEY=$api_key
+
 echo ""
 echo "🧪 测试安装："
-echo "  claude --version"
+echo "🔍 Claude版本检查..."
+if command -v claude &> /dev/null; then
+    claude --version
+    echo "🎉 Claude Code安装成功！现在可以开始使用了"
+    echo ""
+    echo "💡 快速开始："
+    echo "  claude          # 启动交互模式"
+    echo "  claude --help   # 查看帮助"
+else
+    echo "⚠️  claude命令未找到，可能需要重新打开终端或检查PATH环境变量"
+fi
